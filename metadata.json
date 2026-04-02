@@ -1,0 +1,5 @@
+{
+  "name": "Echo Room",
+  "description": "A private 1-on-1 chat app with video calls, voice notes, file sharing, and mini-games.",
+  "requestFramePermissions": ["camera", "microphone"]
+}

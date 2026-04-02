@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "Room": {
+      "title": "Room",
+      "description": "A chat room for two users",
+      "type": "object",
+      "properties": {
+        "createdAt": { "type": "timestamp" },
+        "createdBy": { "type": "string" },
+        "participants": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "peerIds": {
+          "type": "object",
+          "description": "Map of uid to peerId"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["waiting", "active", "closed"]
+        }
+      },
+      "required": ["createdAt", "createdBy", "participants", "status"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message in a chat room",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "fileData": { "type": "string", "description": "Base64 encoded file data" },
+        "createdAt": { "type": "timestamp" },
+        "type": {
+          "type": "string",
+          "enum": ["text", "image", "video", "audio", "system"]
+        }
+      },
+      "required": ["senderId", "createdAt", "type"]
+    },
+    "GameState": {
+      "title": "GameState",
+      "description": "State of the mini-game (Tic-Tac-Toe)",
+      "type": "object",
+      "properties": {
+        "board": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "turn": { "type": "string" },
+        "winner": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["playing", "finished", "draw"]
+        },
+        "players": {
+          "type": "object",
+          "description": "Map of uid to 'X' or 'O'"
+        }
+      },
+      "required": ["board", "turn", "status", "players"]
+    }
+  },
+  "firestore": {
+    "/rooms/{roomId}": {
+      "schema": { "$ref": "Room" },
+      "description": "Chat rooms"
+    },
+    "/rooms/{roomId}/messages/{messageId}": {
+      "schema": { "$ref": "Message" },
+      "description": "Messages in a chat room"
+    },
+    "/rooms/{roomId}/game/state": {
+      "schema": { "$ref": "GameState" },
+      "description": "Game state for a chat room"
+    }
+  }
+}
