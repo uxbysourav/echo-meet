@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from './firebase';
 import Home from './components/Home';
@@ -34,7 +34,7 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Home user={user} />} />
         <Route 
@@ -42,6 +42,6 @@ export default function App() {
           element={user ? <ChatRoom user={user} /> : <Navigate to="/" />} 
         />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
