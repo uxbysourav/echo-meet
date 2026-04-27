@@ -85,9 +85,28 @@ export default function ChatRoom({ user }: { user: User }) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setLocalStream(stream);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Failed to get local stream', err);
-        alert('Could not access camera/microphone.');
+        
+        // Show informative error based on why it failed
+        if (err.name === 'NotAllowedError' || err.message?.includes('Permission') || err.message?.includes('denied')) {
+           alert('Camera/Microphone permission denied.\n\nPlease click the camera icon in your browser address bar to allow permissions.\n\nIf you are using the embedded preview, please open the application in a new tab by clicking the "Open in new tab" icon at the top right.');
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+           alert('No camera or microphone found on your device. You can still join the room to text chat.');
+        } else {
+           alert(`Could not access media devices: ${err.message}`);
+        }
+        
+        // Disable by default if we failed
+        setAudioEnabled(false);
+        setVideoEnabled(false);
+
+        // Create a dummy stream so PeerJS can still establish WebRTC and receive incoming media
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 480;
+        const dummyStream = canvas.captureStream();
+        setLocalStream(dummyStream);
       }
     };
     initMedia();

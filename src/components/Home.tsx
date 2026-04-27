@@ -54,7 +54,7 @@ export default function Home({ user }: { user: User | null }) {
         createdAt: serverTimestamp(),
         createdBy: user.uid,
         participants: [user.uid],
-        status: 'active',
+        status: 'waiting',
         peerIds: {},
         profiles: {
           [user.uid]: getUserProfile(user)
@@ -65,9 +65,9 @@ export default function Home({ user }: { user: User | null }) {
         raisedHands: []
       });
       navigate(`/room/${roomId}`);
-    } catch (err) {
+    } catch (err: any) {
       handleFirestoreError(err, OperationType.CREATE, `rooms/${roomId}`);
-      setError('Failed to create meeting.');
+      setError(`Failed to create meeting: ${err.message}`);
     } finally {
       setLoading(false);
     }
