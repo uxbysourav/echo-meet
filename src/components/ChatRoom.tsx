@@ -4,7 +4,7 @@ import { User } from 'firebase/auth';
 import { doc, onSnapshot, updateDoc, collection, addDoc, serverTimestamp, query, orderBy, limit, arrayRemove, deleteField, arrayUnion } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import Peer from 'peerjs';
-import { Mic, MicOff, Video, VideoOff, Hand, MessageSquare, Users, Copy, Send, Paperclip, MonitorUp, PhoneOff, Clock, X, Info } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, Hand, MessageSquare, Users, Copy, Send, Paperclip, MonitorUp, PhoneOff, Clock, X, Info, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
 
@@ -39,9 +39,9 @@ const VideoTile = ({ stream, isLocal, name, isMuted, isVideoOn, isHandRaised }: 
 
       <AnimatePresence>
         {isHandRaised && (
-          <motion.initial initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute top-4 right-4 rounded-xl bg-yellow-500 px-3 py-3 text-white shadow-xl shadow-yellow-500/20">
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute top-4 right-4 rounded-xl bg-yellow-500 px-3 py-3 text-white shadow-xl shadow-yellow-500/20">
             <Hand className="h-5 w-5 animate-pulse" />
-          </motion.initial>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
@@ -622,7 +622,7 @@ export default function ChatRoom({ user }: { user: User }) {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: '100%', opacity: 0 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 h-full w-full md:relative md:h-full md:w-[340px] md:rounded-3xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl border-l md:border border-gray-200 dark:border-white/10 flex flex-col z-30 shadow-2xl overflow-hidden"
+                className="fixed inset-0 z-50 md:relative md:inset-auto md:z-30 md:h-full md:w-[340px] md:rounded-3xl bg-white dark:bg-gray-900/95 backdrop-blur-xl border-l md:border border-gray-200 dark:border-white/10 flex flex-col shadow-2xl overflow-hidden"
              >
                 <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5">
                    <h3 className="font-bold text-gray-900 dark:text-white tracking-tight">{tab === 'chat' ? 'Meeting Chat' : 'Participants'}</h3>
@@ -743,8 +743,8 @@ export default function ChatRoom({ user }: { user: User }) {
       </div>
 
       {/* Floating Bottom Controls (Island) */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
-        <div className="flex items-center gap-2 sm:gap-3 rounded-3xl bg-white/80 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-4 py-3 backdrop-blur-xl shadow-2xl transition-colors">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 w-full max-w-fit px-2">
+        <div className="flex items-center justify-center gap-1.5 sm:gap-3 rounded-3xl bg-white/80 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-3 sm:px-4 py-3 backdrop-blur-xl shadow-2xl transition-colors overflow-x-auto custom-scrollbar">
            <button onClick={toggleAudio} className={clsx("flex w-12 h-12 sm:w-14 sm:h-14 items-center justify-center rounded-full transition-all duration-300 shadow-sm", audioEnabled ? "bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20" : "bg-red-500 text-white hover:bg-red-600")}>
               {audioEnabled ? <Mic className="w-5 h-5 sm:w-6 sm:h-6" /> : <MicOff className="w-5 h-5 sm:w-6 sm:h-6" />}
            </button>
