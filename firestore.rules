@@ -45,6 +45,11 @@ service cloud.firestore {
         allow read: if isAuthenticated() && isParticipant(roomId);
         allow create, update: if isAuthenticated() && isParticipant(roomId);
       }
+
+      match /whiteboard/{strokeId} {
+        allow read: if isAuthenticated() && isParticipant(roomId);
+        allow create, update, delete: if isAuthenticated() && isParticipant(roomId);
+      }
     }
   }
 }
